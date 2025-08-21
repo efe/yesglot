@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yesglot"
+version = "0.1.0a4"
+description = "Django app for seamless AI-assisted translation of .po files."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "Efe Öge", email = "efeoge@gmail.com" }]
+keywords = ["django", "app", "llm", "translation"]
+classifiers = [
+  "Framework :: Django",
+  "Framework :: Django :: 4",
+  "Framework :: Django :: 5",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+    "Django>=4.2",
+    "litellm>=1.75.8",
+    "tiktoken>=0.11",
+    "polib>=1.2",
+    "Babel>=2.17",
+]
+
+[project.urls]
+Homepage = "https://github.com/efe/yesglot"
+Issues = "https://github.com/efe/yesglot/issues"
+
+[tool.hatch.build]
+include = ["yesglot/**", "README.md", "LICENSE"]
+packages = ["yesglot"]
