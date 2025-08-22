@@ -4,7 +4,7 @@ import logging
 import tiktoken
 from litellm import completion, completion_cost, get_max_tokens
 
-from yesglot.settings import API_KEY, LLM_MODEL, PER_ITEM_OUTPUT, SAFETY_MARGIN
+from yesglot.settings import API_KEY, LLM_MODEL, PER_ITEM_OUTPUT, SAFETY_MARGIN, LLM_MODEL_TEMPERATURE
 
 logging.getLogger("LiteLLM").setLevel(logging.ERROR)
 
@@ -74,7 +74,7 @@ def translate_batch(batch, target_language, model):
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": user_prompt},
         ],
-        temperature=0,
+        temperature=LLM_MODEL_TEMPERATURE,
         api_key=API_KEY,
     )
     cost = completion_cost(completion_response=response)

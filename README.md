@@ -43,6 +43,7 @@ Optional parameters,
 
 - `YESGLOT_SAFETY_MARGIN`: 1000 (default)
 - `YESGLOT_PER_ITEM_OUTPUT`: 100 (default)
+- `YESGLOT_LLM_MODEL_TEMPERATURE`: 0 (default)
 
 ## Usage
 
