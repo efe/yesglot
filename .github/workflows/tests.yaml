@@ -100,9 +100,7 @@ jobs:
             coverage.xml
             htmlcov/
 
-      # Optional: upload to Codecov if token is present
       - name: Upload to Codecov
-        if: ${{ secrets.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@v4
         with:
           files: coverage.xml
