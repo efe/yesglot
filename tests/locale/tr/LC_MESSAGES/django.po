@@ -1,0 +1,4 @@
+# SOME DESCRIPTIVE TITLE.
+#: templates/index.html:1
+msgid "Hello, world!"
+msgstr ""
