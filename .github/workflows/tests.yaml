@@ -36,74 +36,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r tests/requirements.txt
           pip install --upgrade "Django==${{ matrix.django }}"
-          pip install coverage
           # If you want to install the project itself (when it has setup.py/pyproject.toml):
           if [ -f setup.py ] || [ -f pyproject.toml ]; then
             pip install -e .
           fi
 
-      - name: Run tests with coverage
+      - name: Run tests
         working-directory: tests
         env:
           VCR_RECORD_MODE: none
         run: |
-          # Use --parallel so each matrix job writes its own .coverage.* file
-          coverage run --parallel manage.py test
-
-      - name: Upload coverage data (per-matrix)
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-${{ matrix.python }}-${{ matrix.django }}
-          path: |
-            tests/.coverage.*
-          if-no-files-found: error
-
-  coverage:
-    name: Merge & Report Coverage
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code (for source paths)
-        uses: actions/checkout@v4
-
-      - name: Download all coverage artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: coverage-*
-          merge-multiple: true
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-          cache: "pip"
-
-      - name: Install coverage
-        run: pip install coverage
-
-      - name: Combine coverage and generate reports
-        run: |
-          # Combine all .coverage.* files from matrix runs
-          coverage combine
-          # Text summary in logs and job summary
-          coverage report -m | tee -a "$GITHUB_STEP_SUMMARY"
-          # XML for Codecov / other tools
-          coverage xml -o coverage.xml
-          # Optional HTML (uploaded as artifact)
-          coverage html
-
-      - name: Upload coverage.xml and HTML report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-reports
-          path: |
-            coverage.xml
-            htmlcov/
-
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          files: coverage.xml
-          flags: unittests
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          python manage.py test
