@@ -46,4 +46,4 @@ jobs:
         env:
           VCR_RECORD_MODE: none
         run: |
-          pytest -q
+          python manage.py test
