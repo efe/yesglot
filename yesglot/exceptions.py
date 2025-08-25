@@ -1,0 +1,4 @@
+
+
+class YesGlotException(Exception):
+    pass

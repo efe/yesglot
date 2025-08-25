@@ -3,7 +3,7 @@ from time import perf_counter
 from django.core.management.base import BaseCommand
 
 from yesglot.llm import translate_items
-from yesglot.settings import LLM_MODEL
+from yesglot.settings import yesglot_settings
 from yesglot.translation_files import fill_translations, parse_empty_translations
 from yesglot.utils import get_language_name, get_project_po_files
 
@@ -14,7 +14,7 @@ class Command(BaseCommand):
     def handle(self, **options):  # noqa
         start = perf_counter()
         self.stdout.write(self.style.SUCCESS("▶ Translation run started."))
-        self.stdout.write(f"Using translation model: {self.style.NOTICE(LLM_MODEL)}\n")
+        self.stdout.write(f"Using translation model: {self.style.NOTICE(yesglot_settings.LLM_MODEL)}\n")
 
         project_po_files = get_project_po_files()
         if not project_po_files:
