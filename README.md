@@ -2,9 +2,9 @@
 
 ![https://pypi.org/project/yesglot](https://img.shields.io/pypi/v/yesglot) ![https://github.com/efe/yesglot/actions?query=branch%3Amain](https://img.shields.io/github/check-runs/efe/yesglot/main) ![https://github.com/efe/yesglot/blob/main/LICENSE](https://img.shields.io/github/license/efe/yesglot) ![](https://img.shields.io/pypi/frameworkversions/django/yesglot)
 
-> LLM-powered Django translations 🧠
+> LLM-powered Django translations ✨
 
-A Django app that autofills missing translations in `.po` files using an LLM, while respecting [ICU](https://unicode-org.github.io/icu/)/format placeholders and source references.
+A Django app that autofills missing translations in `.po` files using an LLM, while respecting [ICU](https://unicode-org.github.io/icu/) format placeholders and source references.
 
 ## Why yesglot?
 
