@@ -4,17 +4,10 @@ import logging
 import tiktoken
 from litellm import completion, completion_cost, get_max_tokens
 
-from yesglot.settings import API_KEY, LLM_MODEL, PER_ITEM_OUTPUT, SAFETY_MARGIN, LLM_MODEL_TEMPERATURE
+from yesglot.prompts import get_system_prompt, get_preamble_template
+from yesglot.settings import yesglot_settings
 
 logging.getLogger("LiteLLM").setLevel(logging.ERROR)
-
-SYSTEM_PROMPT = (
-    "You are a professional translator. Translate into the target language.\n"
-    "- Keep placeholders like {name} / {{handlebars}} unchanged.\n"
-    "- Keep URLs and emails unchanged.\n"
-    "- Return ONLY a JSON array of strings in the same order."
-)
-PREAMBLE_TEMPLATE = "Translate these items into {language}. Return ONLY a JSON array:\n"
 
 
 def get_encoder(model):
@@ -33,8 +26,8 @@ def make_batches(items, target_language, model):
     encoder = get_encoder(model)
 
     # Precompute stable token costs
-    system_tokens = count_tokens(SYSTEM_PROMPT, encoder)
-    user_preamble = PREAMBLE_TEMPLATE.format(language=target_language)
+    system_tokens = count_tokens(get_system_prompt(), encoder)
+    user_preamble = get_preamble_template().format(language=target_language)
     preamble_tokens = count_tokens(user_preamble, encoder)
 
     batches = []
@@ -48,13 +41,13 @@ def make_batches(items, target_language, model):
         items_tokens = count_tokens(items_json, encoder)
 
         # Estimated output tokens
-        est_output_tokens = PER_ITEM_OUTPUT * len(candidate)
+        est_output_tokens = yesglot_settings.PER_ITEM_OUTPUT * len(candidate)
 
         # Total estimated tokens
         total_tokens = system_tokens + preamble_tokens + items_tokens + est_output_tokens
 
-        max_context_tokens = get_max_tokens(LLM_MODEL)
-        if current and total_tokens >= (max_context_tokens - SAFETY_MARGIN):
+        max_context_tokens = get_max_tokens(yesglot_settings.LLM_MODEL)
+        if current and total_tokens >= (max_context_tokens - yesglot_settings.SAFETY_MARGIN):
             batches.append(current)
             current = [item]
         else:
@@ -67,15 +60,15 @@ def make_batches(items, target_language, model):
 
 
 def translate_batch(batch, target_language, model):
-    user_prompt = PREAMBLE_TEMPLATE.format(language=target_language) + json.dumps(batch, ensure_ascii=False)
+    user_prompt = get_preamble_template().format(language=target_language) + json.dumps(batch, ensure_ascii=False)
     response = completion(
         model=model,
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": get_system_prompt()},
             {"role": "user", "content": user_prompt},
         ],
-        temperature=LLM_MODEL_TEMPERATURE,
-        api_key=API_KEY,
+        temperature=yesglot_settings.LLM_MODEL_TEMPERATURE,
+        api_key=yesglot_settings.API_KEY,
     )
     cost = completion_cost(completion_response=response)
 
@@ -83,7 +76,7 @@ def translate_batch(batch, target_language, model):
     return json.loads(content), cost
 
 
-def translate_items(items, target_language, model=LLM_MODEL):
+def translate_items(items, target_language, model=yesglot_settings.LLM_MODEL):
     results = []
     total_cost = 0
     for batch in make_batches(items, target_language, model):

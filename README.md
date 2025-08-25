@@ -45,6 +45,33 @@ Optional parameters,
 - `YESGLOT_PER_ITEM_OUTPUT`: 100 (default)
 - `YESGLOT_LLM_MODEL_TEMPERATURE`: 0 (default)
 
+### System Prompt
+
+It is preconfigured, though you may override it to tailor the behavior of your translation.
+
+- `SYSTEM_PROMPT_FUNCTION`: for example, `"myproject.myapp.utils.get_system_prompt"`
+- `SYSTEM_PROMPT`: string
+
+Default:
+
+> You are a professional translator. Translate into the target language.
+> - Keep placeholders like {name} / {{handlebars}} unchanged.
+> - Keep URLs and emails unchanged.
+> - Return ONLY a JSON array of strings in the same order.
+
+
+### Preamble Template
+
+It’s already configured, but you can override it to adjust how your translation behaves.
+
+- `PREAMBLE_TEMPLATE_FUNCTION`: for example, `"myproject.myapp.utils.get_preamble"`
+- `PREAMBLE_TEMPLATE`: string
+
+Default:
+
+> Translate these items into {language}. Return ONLY a JSON array:
+
+
 ## Usage
 
 A typical workflow with Django translations:
