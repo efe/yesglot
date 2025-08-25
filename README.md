@@ -1,5 +1,9 @@
 # yesglot
 
+![https://pypi.org/project/yesglot](https://img.shields.io/pypi/v/yesglot) ![https://github.com/efe/yesglot/actions?query=branch%3Amain](https://img.shields.io/github/check-runs/efe/yesglot/main) ![https://github.com/efe/yesglot/blob/main/LICENSE](https://img.shields.io/github/license/efe/yesglot) ![](https://img.shields.io/pypi/frameworkversions/django/yesglot)
+
+> LLM-powered Django translations 🧠
+
 A Django app that autofills missing translations in `.po` files using an LLM, while respecting [ICU](https://unicode-org.github.io/icu/)/format placeholders and source references.
 
 ## Why yesglot?
@@ -10,18 +14,15 @@ A Django app that autofills missing translations in `.po` files using an LLM, wh
 - 🧮 Cost-aware: prints per-file and total cost (via LiteLLM)
 - 🧱 Token-safe batching: automatically splits work to avoid context overflows
 
-## Requirements
+## 🚀Quick Start
 
-- Python 3.10+ (recommended)
-- Django
-
-## Installation
+### Installation
 
 ```python
 pip install yesglot
 ```
 
-In settings.py:
+Add yesglot to your Django settings:
 
 ```python
 INSTALLED_APPS = [
@@ -38,38 +39,6 @@ Set the model from [100+ LLM models](https://models.litellm.ai/) and API key in 
 YESGLOT_LLM_MODEL = "openai/gpt-4o-mini"
 YESGLOT_API_KEY = "sk-..."
 ```
-
-Optional parameters,
-
-- `YESGLOT_SAFETY_MARGIN`: 1000 (default)
-- `YESGLOT_PER_ITEM_OUTPUT`: 100 (default)
-- `YESGLOT_LLM_MODEL_TEMPERATURE`: 0 (default)
-
-### System Prompt
-
-It is preconfigured, though you may override it to tailor the behavior of your translation.
-
-- `SYSTEM_PROMPT_FUNCTION`: for example, `"myproject.myapp.utils.get_system_prompt"`
-- `SYSTEM_PROMPT`: string
-
-Default:
-
-> You are a professional translator. Translate into the target language.
-> - Keep placeholders like {name} / {{handlebars}} unchanged.
-> - Keep URLs and emails unchanged.
-> - Return ONLY a JSON array of strings in the same order.
-
-
-### Preamble Template
-
-It’s already configured, but you can override it to adjust how your translation behaves.
-
-- `PREAMBLE_TEMPLATE_FUNCTION`: for example, `"myproject.myapp.utils.get_preamble"`
-- `PREAMBLE_TEMPLATE`: string
-
-Default:
-
-> Translate these items into {language}. Return ONLY a JSON array:
 
 
 ## Usage
@@ -108,6 +77,40 @@ Done in 3.76s • Files: 1 • Missing found: 12 • Filled: 12 • Total cost: 
 ```
 python manage.py compilemessages
 ```
+
+## Advantage Usage
+
+Optional parameters,
+
+- `YESGLOT_SAFETY_MARGIN`: 1000 (default)
+- `YESGLOT_PER_ITEM_OUTPUT`: 100 (default)
+- `YESGLOT_LLM_MODEL_TEMPERATURE`: 0 (default)
+
+### System Prompt
+
+It is preconfigured, though you may override it to tailor the behavior of your translation.
+
+- `SYSTEM_PROMPT_FUNCTION`: for example, `"myproject.myapp.utils.get_system_prompt"`
+- `SYSTEM_PROMPT`: string
+
+Default:
+
+> You are a professional translator. Translate into the target language.
+> - Keep placeholders like {name} / {{handlebars}} unchanged.
+> - Keep URLs and emails unchanged.
+> - Return ONLY a JSON array of strings in the same order.
+
+
+### Preamble Template
+
+It’s already configured, but you can override it to adjust how your translation behaves.
+
+- `PREAMBLE_TEMPLATE_FUNCTION`: for example, `"myproject.myapp.utils.get_preamble"`
+- `PREAMBLE_TEMPLATE`: string
+
+Default:
+
+> Translate these items into {language}. Return ONLY a JSON array:
 
 # License
 

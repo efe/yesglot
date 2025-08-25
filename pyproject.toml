@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "yesglot"
-version = "0.1.0a4"
+version = "1.0.0"
 description = "Django app for seamless AI-assisted translation of .po files."
 readme = "README.md"
 requires-python = ">=3.9"
