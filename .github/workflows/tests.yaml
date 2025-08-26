@@ -57,6 +57,7 @@ jobs:
         if: matrix.python == '3.13' && matrix.django == '5.2.*'
         uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           file: ./tests/coverage.xml
           flags: unittests
           name: yesglot-coverage
