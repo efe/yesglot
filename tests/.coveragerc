@@ -1,0 +1,25 @@
+[run]
+source = ., yesglot
+plugins = django_coverage_plugin
+omit =
+    */migrations/*
+    */venv/*
+    */env/*
+    manage.py
+    */settings/*
+    */virtualenv/*
+    */site-packages/*
+    */__pycache__/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise AssertionError
+    raise NotImplementedError
+
+[html]
+directory = htmlcov
+
+[xml]
+output = coverage.xml

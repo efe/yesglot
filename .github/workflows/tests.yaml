@@ -36,7 +36,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r tests/requirements.txt
           pip install --upgrade "Django==${{ matrix.django }}"
-          # If you want to install the project itself (when it has setup.py/pyproject.toml):
           if [ -f setup.py ] || [ -f pyproject.toml ]; then
             pip install -e .
           fi
@@ -46,4 +45,19 @@ jobs:
         env:
           VCR_RECORD_MODE: none
         run: |
-          python manage.py test
+          if [[ "${{ matrix.python }}" == "3.13" && "${{ matrix.django }}" == "5.2.*" ]]; then
+            coverage run --source='.,yesglot' manage.py test
+            coverage report -m
+            coverage xml
+          else
+            python manage.py test
+          fi
+
+      - name: Upload coverage to Codecov
+        if: matrix.python == '3.13' && matrix.django == '5.2.*'
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./tests/coverage.xml
+          flags: unittests
+          name: yesglot-coverage
+          fail_ci_if_error: false
